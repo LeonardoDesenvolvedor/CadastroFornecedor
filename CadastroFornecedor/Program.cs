@@ -1,4 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+
+builder.Services.AddDbContext<CadastroFornecedor.Data.AppCont>(options =>
+{
+    options.UseSqlServer(builder
+    .Configuration
+    .GetConnectionString("DBtoDo"));
+});
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
