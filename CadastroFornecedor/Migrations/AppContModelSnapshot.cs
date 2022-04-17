@@ -33,7 +33,8 @@ namespace CadastroFornecedor.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(30)")
+                        .HasColumnName("emp_email");
 
                     b.Property<string>("NomeFantasia")
                         .IsRequired()
@@ -49,7 +50,7 @@ namespace CadastroFornecedor.Migrations
 
                     b.HasKey("cod_empresa");
 
-                    b.ToTable("tbl_Empresa");
+                    b.ToTable("Empresa", (string)null);
                 });
 
             modelBuilder.Entity("CadastroFornecedor.Models.Endereco", b =>
@@ -78,7 +79,7 @@ namespace CadastroFornecedor.Migrations
                         .HasColumnType("text")
                         .HasColumnName("end_cidade");
 
-                    b.Property<long>("Fornecedorcod_fornecedor")
+                    b.Property<long>("Empresacod_empresa")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Logradouro")
@@ -89,16 +90,22 @@ namespace CadastroFornecedor.Migrations
 
                     b.Property<string>("Numero")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("end_numero");
 
-                    b.Property<long?>("cod_fornecedor")
+                    b.Property<string>("Referente")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("referente");
+
+                    b.Property<long?>("cod_empresa")
                         .HasColumnType("bigint");
 
                     b.HasKey("cod_endereco");
 
-                    b.HasIndex("Fornecedorcod_fornecedor");
+                    b.HasIndex("Empresacod_empresa");
 
-                    b.ToTable("tbl_Endereco");
+                    b.ToTable("Endereco", (string)null);
                 });
 
             modelBuilder.Entity("CadastroFornecedor.Models.Fornecedor", b =>
@@ -116,10 +123,10 @@ namespace CadastroFornecedor.Migrations
 
                     b.HasKey("cod_fornecedor");
 
-                    b.ToTable("tbl_fornecedor");
+                    b.ToTable("Fornecedor", (string)null);
                 });
 
-            modelBuilder.Entity("CadastroFornecedor.Models.FornEmps", b =>
+            modelBuilder.Entity("CadastroFornecedor.Models.FornEmp", b =>
                 {
                     b.Property<long?>("cod_forn_emps")
                         .ValueGeneratedOnAdd()
@@ -145,21 +152,21 @@ namespace CadastroFornecedor.Migrations
 
                     b.HasIndex("Fornecedorcod_fornecedor");
 
-                    b.ToTable("Forn_Emps");
+                    b.ToTable("FornEmp", (string)null);
                 });
 
             modelBuilder.Entity("CadastroFornecedor.Models.Endereco", b =>
                 {
-                    b.HasOne("CadastroFornecedor.Models.Fornecedor", "Fornecedor")
-                        .WithMany("Endereco")
-                        .HasForeignKey("Fornecedorcod_fornecedor")
+                    b.HasOne("CadastroFornecedor.Models.Empresa", "Empresa")
+                        .WithMany("Enderecos")
+                        .HasForeignKey("Empresacod_empresa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Fornecedor");
+                    b.Navigation("Empresa");
                 });
 
-            modelBuilder.Entity("CadastroFornecedor.Models.FornEmps", b =>
+            modelBuilder.Entity("CadastroFornecedor.Models.FornEmp", b =>
                 {
                     b.HasOne("CadastroFornecedor.Models.Empresa", "Empresa")
                         .WithMany("FornEmps")
@@ -180,13 +187,13 @@ namespace CadastroFornecedor.Migrations
 
             modelBuilder.Entity("CadastroFornecedor.Models.Empresa", b =>
                 {
+                    b.Navigation("Enderecos");
+
                     b.Navigation("FornEmps");
                 });
 
             modelBuilder.Entity("CadastroFornecedor.Models.Fornecedor", b =>
                 {
-                    b.Navigation("Endereco");
-
                     b.Navigation("FornEmps");
                 });
 #pragma warning restore 612, 618
